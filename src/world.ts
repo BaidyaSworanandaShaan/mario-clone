@@ -4,7 +4,7 @@ import { tileSize } from "./constants";
 import { Element } from "./element";
 import { Goomba } from "./goombas";
 import { Mario } from "./mario";
-import type { PowerUp } from "./powerUp";
+
 import { CANVAS_HEIGHT, CANVAS_WIDTH as viewPort, MAP } from "./base";
 import { coinTextElement, scoreTextElement } from "./htmlElements";
 import { getCollisionDirection, getTileMapIndex } from "./utils";
@@ -29,7 +29,7 @@ export class World {
   keys: Keys;
   score: number;
   goombas: Goomba[];
-  powerUps: PowerUp[];
+
   coins: Coin[];
   coinCount: number;
   centerPos: number;
@@ -61,9 +61,9 @@ export class World {
       flags: [],
     };
     this.goombas = [];
-    this.powerUps = [];
+
     this.coins = [];
-    // this.bullets = [];
+
     this.centerPos = 0;
     this.lastKey = "right";
     this.coinCount = 0;
@@ -162,7 +162,6 @@ export class World {
         if (this.mario.category !== "super") return;
 
         this.keys.ctrl = true;
-        //Add Bullets
       }
     });
 
@@ -197,7 +196,7 @@ export class World {
     }
     this.coins.forEach((coins) => coins.draw(this.ctx));
     this.goombas.forEach((goomba) => goomba.draw(this.ctx));
-    this.powerUps.forEach((powerUp) => powerUp.draw(this.ctx));
+
     this.mario.draw(this.ctx);
   };
 
@@ -213,10 +212,6 @@ export class World {
       }
     });
 
-    this.powerUps.forEach((powerUp) => {
-      powerUp.update();
-      powerUp.dy += gravity;
-    });
     //Remove coin if hit blocks
     this.coins.forEach((coin, cIndex) => {
       if (coin.y > coin.initialY) {
@@ -358,8 +353,7 @@ export class World {
   checkGoombaElementCollision = (elementArray: Element[]): void => {
     elementArray.forEach((element) => {
       this.goombas.forEach((goomba) => {
-        if (goomba.state === "dead" || goomba.state === "deadFromBullet")
-          return;
+        if (goomba.state === "dead") return;
         const dir = getCollisionDirection(goomba, element);
         if (!dir) return;
 
@@ -372,7 +366,7 @@ export class World {
   };
   checkMarioGoombaCollision = (): void => {
     this.goombas.forEach((goomba, index) => {
-      if (goomba.state === "dead" || goomba.state === "deadFromBullet") return;
+      if (goomba.state === "dead") return;
       if (this.mario.isInVulnerable) return;
 
       let dir = getCollisionDirection(this.mario, goomba);
@@ -396,8 +390,10 @@ export class World {
           this.marioDeadFromGoomba = true;
           this.isGameActive = false;
           clearInterval(this.interval);
-          cancelAnimationFrame(this.gameAnimationFrame);
-          this.isGameActive = false;
+          setTimeout(() => {
+            cancelAnimationFrame(this.gameAnimationFrame);
+            this.isGameActive = false;
+          }, 200);
 
           setTimeout(this.restart, 2500);
         }

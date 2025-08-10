@@ -6,7 +6,7 @@ interface GoombaProps {
   y: number;
 }
 
-type GoombaState = "alive" | "dead" | "deadFromBullet";
+type GoombaState = "alive" | "dead";
 
 const goombaImage = createImage(goombaImg);
 
@@ -82,13 +82,6 @@ export class Goomba {
       if (this.tick > 45) {
         this.frames = 4;
       }
-      return;
-    }
-
-    if (this.state === "deadFromBullet") {
-      this.frames = 3;
-      this.y += this.dy;
-
       return;
     }
   }

@@ -62,7 +62,8 @@ export class Mario {
       this.height // Height to draw on canvas
     );
   }
-  updateSprite(): void {}
+ updateSprite(): void {
+  }
   update(): void {
     this.x += this.dx;
     this.y += this.dy;
