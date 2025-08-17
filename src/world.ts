@@ -6,7 +6,7 @@ import { Goomba } from "./goombas";
 import { Mario } from "./mario";
 
 import { CANVAS_HEIGHT, CANVAS_WIDTH as viewPort, MAP } from "./base";
-import { coinTextElement, scoreTextElement } from "./htmlElements";
+import { coinTextElement, scoreTextElement } from "./domElements";
 import { getCollisionDirection, getTileMapIndex } from "./utils";
 interface Keys {
   [key: string]: boolean;
@@ -38,7 +38,7 @@ export class World {
   isGameActive: boolean;
   marioInGround: boolean;
   interval: number;
-  marioDeadFromGoomba: boolean;
+  ismarioDead: boolean;
   levelComplete: boolean;
   gameAnimationFrame: number;
   constructor() {
@@ -72,7 +72,7 @@ export class World {
     this.renderMap();
     this.isGameActive = true;
     this.levelComplete = false;
-    this.marioDeadFromGoomba = false;
+    this.ismarioDead = false;
   }
 
   renderMap(): void {
@@ -227,6 +227,7 @@ export class World {
       this.mario.dy += gravity;
       this.mario.isOnGround = false;
     } else if (this.mario.y - 32 > CANVAS_HEIGHT) {
+      this.ismarioDead = true;
       this.isGameActive = false;
 
       clearInterval(this.interval);
@@ -387,7 +388,7 @@ export class World {
       if ((left || right) && offset > 4) {
         if (this.mario.category === "small") {
           this.mario.frames = 13;
-          this.marioDeadFromGoomba = true;
+          this.ismarioDead = true;
           this.isGameActive = false;
           clearInterval(this.interval);
           setTimeout(() => {
