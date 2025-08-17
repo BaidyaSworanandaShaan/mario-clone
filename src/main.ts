@@ -2,7 +2,7 @@ import {
   mainMenuContainer,
   menuScreenContainer,
   startGameBtn,
-} from "./htmlElements";
+} from "./domElements";
 import { showMenuScreen } from "./screen";
 import { World } from "./world";
 
